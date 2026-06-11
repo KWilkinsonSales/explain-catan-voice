@@ -2,125 +2,202 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Adaptive Decision Logic</title>
-  <meta name="description" content="Adaptive Decision Logic is infrastructure for decision clarity, trust, and observability." />
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#101827" />
+  <title>Explain It — Catan Coach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0d1522;
+      --panel:#131f31;
+      --panel-2:#192941;
+      --text:#f6f2e9;
+      --muted:#a9b6c8;
+      --gold:#f4b860;
+      --sea:#4fb6a6;
+      --brick:#d97a5f;
+      --line:rgba(255,255,255,.09);
+      --shadow:0 30px 80px rgba(0,0,0,.36);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'DM Sans',system-ui,sans-serif;
+      background:
+        radial-gradient(circle at 18% 10%, rgba(79,182,166,.17), transparent 28%),
+        radial-gradient(circle at 85% 20%, rgba(244,184,96,.13), transparent 25%),
+        linear-gradient(180deg,#0b1420 0%,#101827 100%);
+      color:var(--text);
+      overflow:hidden;
+    }
+    .app{height:100%;max-width:520px;margin:0 auto;position:relative;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 18px env(safe-area-inset-bottom)}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 2px 8px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .mark{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--gold),#e78b56);display:grid;place-items:center;box-shadow:0 10px 24px rgba(244,184,96,.22);font-size:18px}
+    .brand-copy strong{display:block;font-family:'Fraunces',serif;font-size:17px;letter-spacing:.1px}
+    .brand-copy span{display:block;color:var(--muted);font-size:11px;margin-top:1px}
+    .mission-pill{border:1px solid var(--line);background:rgba(255,255,255,.04);padding:8px 10px;border-radius:999px;color:var(--muted);font-size:11px}
+    .screen{flex:1;display:none;flex-direction:column;min-height:0}
+    .screen.active{display:flex}
+    .hero{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:12px 8px 22px}
+    .orb-wrap{position:relative;width:210px;height:210px;margin-bottom:30px}
+    .orb,.ring,.ring2{position:absolute;inset:0;border-radius:50%}
+    .orb{inset:32px;background:radial-gradient(circle at 35% 30%,#ffe3a7 0%,#f4b860 35%,#d97a5f 72%,#9b4d45 100%);box-shadow:0 0 70px rgba(244,184,96,.35), inset 0 -18px 38px rgba(103,39,33,.22);display:grid;place-items:center;font-size:50px;transition:.4s ease}
+    .ring{border:1px solid rgba(244,184,96,.28);animation:pulse 2.6s ease-in-out infinite}
+    .ring2{inset:18px;border:1px solid rgba(79,182,166,.18);animation:pulse 2.6s ease-in-out infinite .7s}
+    @keyframes pulse{0%,100%{transform:scale(.94);opacity:.35}50%{transform:scale(1.04);opacity:.9}}
+    h1{font-family:'Fraunces',serif;font-size:34px;line-height:1.04;margin:0 0 14px;max-width:360px}
+    .sub{font-size:15px;line-height:1.55;color:var(--muted);max-width:350px;margin:0 auto}
+    .start-card{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.035));border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px}
+    .start-btn,.primary-btn{width:100%;border:0;border-radius:18px;padding:17px 20px;font-size:16px;font-weight:700;color:#19202a;background:linear-gradient(135deg,#ffd482,var(--gold));box-shadow:0 14px 30px rgba(244,184,96,.23);cursor:pointer}
+    .hint{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+
+    .voice-stage{flex:1;display:flex;flex-direction:column;min-height:0;padding:6px 0 14px}
+    .status-row{display:flex;justify-content:space-between;align-items:center;margin:2px 2px 12px}
+    .status{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--sea);box-shadow:0 0 14px var(--sea)}
+    .timer{font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted)}
+    .voice-card{flex:1;min-height:0;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));border:1px solid var(--line);border-radius:28px;padding:22px 20px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;box-shadow:var(--shadow)}
+    .mini-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+    .voice-orb-wrap{position:relative;width:190px;height:190px;margin-top:10px}
+    .voice-orb{position:absolute;inset:28px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#fff0bf,#f4b860 36%,#d97a5f 71%,#7b3f4a 100%);box-shadow:0 0 60px rgba(244,184,96,.3);display:grid;place-items:center}
+    .wave{display:flex;gap:5px;align-items:center;height:58px}
+    .wave span{display:block;width:5px;border-radius:8px;background:#fff8e9;animation:bars 1s ease-in-out infinite}
+    .wave span:nth-child(2){animation-delay:.12s}.wave span:nth-child(3){animation-delay:.24s}.wave span:nth-child(4){animation-delay:.36s}.wave span:nth-child(5){animation-delay:.48s}
+    @keyframes bars{0%,100%{height:12px;opacity:.55}50%{height:45px;opacity:1}}
+    .voice-ring,.voice-ring2{position:absolute;border-radius:50%;inset:0;border:1px solid rgba(244,184,96,.25);animation:pulse 2.1s ease-in-out infinite}
+    .voice-ring2{inset:16px;border-color:rgba(79,182,166,.22);animation-delay:.5s}
+    .prompt{font-family:'Fraunces',serif;font-size:26px;line-height:1.18;text-align:center;max-width:350px;margin:10px 0 6px}
+    .caption{font-size:13px;color:var(--muted);text-align:center;max-width:360px;line-height:1.45;min-height:38px}
+    .turn-tags{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+    .turn-tags button{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);padding:8px 12px;border-radius:999px;font-size:12px}
+    .controls{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:10px;width:100%;margin-top:16px}
+    .control{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);border-radius:18px;padding:13px 8px;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+    .control.primary{background:linear-gradient(135deg,var(--sea),#327b77);border-color:transparent;font-weight:700}
+    .control.end{background:rgba(217,122,95,.12);color:#ffd6cc;border-color:rgba(217,122,95,.24)}
+    .icon{font-size:20px}
+
+    .receipt{flex:1;display:flex;flex-direction:column;justify-content:center;padding-bottom:22px}
+    .receipt-card{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.035));border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)}
+    .check{width:62px;height:62px;border-radius:20px;display:grid;place-items:center;background:rgba(79,182,166,.16);color:#8de3d6;font-size:32px;margin-bottom:18px}
+    .receipt h2{font-family:'Fraunces',serif;font-size:30px;margin:0 0 10px}
+    .receipt p{color:var(--muted);line-height:1.5;margin:0 0 18px}
+    .rows{display:grid;gap:10px}
+    .row{display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-top:1px solid var(--line);font-size:13px}
+    .row span:first-child{color:var(--muted)}
+    .row strong{text-align:right;font-weight:600}
+    .footer-note{text-align:center;color:var(--muted);font-size:11px;margin-top:12px}
+    .secondary{width:100%;margin-top:14px;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:16px;padding:14px;font-weight:600}
+
+    .camera-preview{position:absolute;inset:74px 18px 18px;border-radius:28px;background:#000;z-index:5;display:none;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow)}
+    .camera-preview.active{display:block}
+    video{width:100%;height:100%;object-fit:cover}
+    .camera-close{position:absolute;top:14px;right:14px;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.45);color:white;font-size:20px}
+    @media (max-height:700px){h1{font-size:30px}.orb-wrap{width:170px;height:170px;margin-bottom:18px}.voice-orb-wrap{width:150px;height:150px}.prompt{font-size:22px}}
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container nav">
+  <main class="app">
+    <header class="topbar">
       <div class="brand">
-        <div class="brand-mark">ADL</div>
-        <div class="brand-text">
-          <div class="brand-name">Adaptive Decision Logic</div>
-          <div class="brand-tag">Decision Environment Observability</div>
-        </div>
+        <div class="mark">✦</div>
+        <div class="brand-copy"><strong>Explain It</strong><span>Temporary voice mission</span></div>
       </div>
-      <nav>
-        <a href="#about">About</a>
-        <a href="#signal">Signal</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </div>
-  </header>
+      <div class="mission-pill">Catan Coach · 2 min</div>
+    </header>
 
-  <main>
-    <section class="hero">
-      <div class="container hero-wrap">
-        <div class="hero-copy">
-          <p class="eyebrow">Infrastructure for consequential decisions</p>
-          <h1>Make the invisible decision environment visible.</h1>
-          <p class="lede">
-            ADL helps organizations see friction, context, and trust breakdowns before decisions stall or fail.
-          </p>
-          <div class="cta-row">
-            <a class="button primary" href="#contact">Start a conversation</a>
-            <a class="button secondary" href="#about">Learn more</a>
+    <section id="startScreen" class="screen active">
+      <div class="hero">
+        <div class="orb-wrap" aria-hidden="true"><div class="ring"></div><div class="ring2"></div><div class="orb">🎲</div></div>
+        <h1>Your Catan Coach is ready</h1>
+        <p class="sub">A quick voice mission for Jonas and Sam. Ask questions, learn one smart idea each, then get back to the game.</p>
+      </div>
+      <div class="start-card">
+        <button id="startBtn" class="start-btn">Start voice mission</button>
+        <div class="hint">Microphone required · camera optional · no transcript saved</div>
+      </div>
+    </section>
+
+    <section id="voiceScreen" class="screen">
+      <div class="voice-stage">
+        <div class="status-row"><div class="status"><span class="dot"></span><span id="statusText">Coach speaking</span></div><div id="timer" class="timer">00:00</div></div>
+        <div class="voice-card">
+          <div class="mini-label">Mission in progress</div>
+          <div class="voice-orb-wrap" aria-hidden="true">
+            <div class="voice-ring"></div><div class="voice-ring2"></div>
+            <div class="voice-orb"><div class="wave"><span></span><span></span><span></span><span></span><span></span></div></div>
           </div>
-        </div>
-
-        <div class="hero-visual" aria-hidden="true">
-          <div class="orb orb-1"></div>
-          <div class="orb orb-2"></div>
-          <div class="orb orb-3"></div>
-          <div class="ring ring-1"></div>
-          <div class="ring ring-2"></div>
-          <div class="signal-card">
-            <div class="signal-line"></div>
-            <div class="signal-line short"></div>
-            <div class="signal-line"></div>
-            <div class="signal-dot"></div>
+          <div>
+            <div id="prompt" class="prompt">Hey Jonas and Sam—ready to build your island?</div>
+            <div id="caption" class="caption">I’ll keep this quick. Each of you gets one question, one useful tip, and then you’re back to the game.</div>
+            <div class="turn-tags"><button data-speaker="Jonas">Jonas</button><button data-speaker="Sam">Sam</button><button data-speaker="Both">Both</button></div>
+          </div>
+          <div class="controls">
+            <button id="cameraBtn" class="control"><span class="icon">📷</span><span>Show board</span></button>
+            <button id="listenBtn" class="control primary"><span class="icon">🎙️</span><span>Listening</span></button>
+            <button id="endBtn" class="control end"><span class="icon">■</span><span>End mission</span></button>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="about" class="section statement">
-      <div class="container narrow">
-        <p class="eyebrow">What ADL is</p>
-        <h2>Most systems govern models. ADL governs decisions.</h2>
-        <p>
-          ADL sits between data and action. It helps teams observe the conditions around important decisions,
-          understand where pressure is rising, and create stronger, more durable outcomes.
-        </p>
-      </div>
-    </section>
-
-    <section id="signal" class="section signal-section">
-      <div class="container signal-grid">
-        <article class="feature-card">
-          <div class="feature-number">01</div>
-          <h3>Observe</h3>
-          <p>Reveal context, friction, and hidden assumptions before they compound.</p>
-        </article>
-        <article class="feature-card">
-          <div class="feature-number">02</div>
-          <h3>Orient</h3>
-          <p>Clarify what matters, where risk is forming, and what needs attention.</p>
-        </article>
-        <article class="feature-card">
-          <div class="feature-number">03</div>
-          <h3>Reflect</h3>
-          <p>Build learning loops that improve trust, follow-through, and future decisions.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section quote-band">
-      <div class="container narrow">
-        <p class="quote">
-          “ADL adds structure to environments that were previously unstructured. Structure enables modeling.
-          Modeling makes outcomes more foreseeable. Trust and fairness emerge as outputs.”
-        </p>
-      </div>
-    </section>
-
-    <section id="contact" class="section contact-section">
-      <div class="container contact-wrap">
-        <div class="contact-copy">
-          <p class="eyebrow">Contact</p>
-          <h2>Start the conversation.</h2>
-          <p>
-            For investor, partnership, or strategic conversations, reach out directly.
-          </p>
+    <section id="receiptScreen" class="screen">
+      <div class="receipt">
+        <div class="receipt-card">
+          <div class="check">✓</div>
+          <h2>Mission complete</h2>
+          <p>The Coach closed the room and kept only this minimal parent receipt.</p>
+          <div class="rows">
+            <div class="row"><span>Jonas</span><strong id="jonasReceipt">Participated · road strategy</strong></div>
+            <div class="row"><span>Sam</span><strong id="samReceipt">Participated · resource strategy</strong></div>
+            <div class="row"><span>Understanding</span><strong>Confirmed</strong></div>
+            <div class="row"><span>Final state</span><strong>Completed</strong></div>
+          </div>
+          <button id="restartBtn" class="secondary">Start a new mission</button>
         </div>
-
-        <div class="contact-card">
-          <div class="contact-name">Kellen Wilkinson</div>
-          <a href="mailto:kellenwilkinson@adaptivedecisionlogic.com">kellenwilkinson@adaptivedecisionlogic.com</a>
-          <a href="tel:4803920056">480.392.0056</a>
-          <a href="https://linkedin.com/in/kellenwilkinson" target="_blank" rel="noreferrer">linkedin.com/in/kellenwilkinson</a>
-        </div>
+        <div class="footer-note">Understanding persisted. Temporary conversation context was cleared.</div>
       </div>
     </section>
+
+    <div id="cameraPreview" class="camera-preview"><video id="video" autoplay playsinline muted></video><button id="cameraClose" class="camera-close">×</button></div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-row">
-      <div>Adaptive Decision Logic</div>
-      <div>Context moves with you.</div>
-    </div>
-  </footer>
+  <script>
+    const screens={start:document.getElementById('startScreen'),voice:document.getElementById('voiceScreen'),receipt:document.getElementById('receiptScreen')};
+    const promptEl=document.getElementById('prompt'), captionEl=document.getElementById('caption'), statusText=document.getElementById('statusText');
+    const missionLines=[
+      ["Hey Jonas and Sam—ready to build your island?","I’ll keep this quick. Each of you gets one question, one useful tip, and then you’re back to the game."],
+      ["Jonas, pick one: giant city or longest road?","Say your choice out loud, then ask me one Catan question."],
+      ["Nice choice, Jonas.","That tells me whether your best next idea is expansion or stronger production."],
+      ["Sam, rare resource or lots of different resources?","Pick one, then ask me your best strategy question."],
+      ["Good thinking, Sam.","That choice changes how much you should depend on trades and ports."],
+      ["Quick check before I go.","Jonas: what do cities do? Sam: what makes a trade useful?"],
+      ["Any last question—or anything you want me to tell Dad?","Then I’ll close the mission so you can keep playing."],
+      ["Awesome work, both of you.","Keep building, trade carefully, and have fun. Catan Coach mission complete—goodbye!"]
+    ];
+    let idx=0,timerInt,startTime,stream;
+    function show(name){Object.values(screens).forEach(s=>s.classList.remove('active'));screens[name].classList.add('active')}
+    function speak(text){
+      if('speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=1.02;u.pitch=1.03;u.volume=1;u.onstart=()=>statusText.textContent='Coach speaking';u.onend=()=>statusText.textContent='Listening';speechSynthesis.speak(u)}
+    }
+    function setLine(i){const [p,c]=missionLines[i];promptEl.textContent=p;captionEl.textContent=c;speak(p+' '+c)}
+    function nextLine(){idx=Math.min(idx+1,missionLines.length-1);setLine(idx)}
+    document.getElementById('startBtn').addEventListener('click',async()=>{
+      show('voice');startTime=Date.now();timerInt=setInterval(()=>{const s=Math.floor((Date.now()-startTime)/1000);document.getElementById('timer').textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`},1000);
+      try{await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){statusText.textContent='Mic permission needed'}
+      setLine(0);setTimeout(nextLine,4800)
+    });
+    document.querySelectorAll('[data-speaker]').forEach(b=>b.addEventListener('click',()=>{statusText.textContent=b.dataset.speaker+' speaking';setTimeout(()=>{nextLine();statusText.textContent='Listening'},700)}));
+    document.getElementById('listenBtn').addEventListener('click',()=>nextLine());
+    document.getElementById('endBtn').addEventListener('click',()=>{clearInterval(timerInt);speechSynthesis.cancel();show('receipt')});
+    document.getElementById('restartBtn').addEventListener('click',()=>{idx=0;show('start')});
+    document.getElementById('cameraBtn').addEventListener('click',async()=>{
+      try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});document.getElementById('video').srcObject=stream;document.getElementById('cameraPreview').classList.add('active')}catch(e){alert('Camera access is unavailable on this device.')}
+    });
+    document.getElementById('cameraClose').addEventListener('click',()=>{document.getElementById('cameraPreview').classList.remove('active');if(stream)stream.getTracks().forEach(t=>t.stop())});
+  </script>
 </body>
 </html>
