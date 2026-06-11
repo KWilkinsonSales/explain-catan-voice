@@ -37,8 +37,6 @@
     remoteAudio.playsInline = true;
     remoteAudio.muted = false;
     remoteAudio.volume = 1;
-    remoteAudio.style.display = 'none';
-    document.body.appendChild(remoteAudio);
 
     pc.ontrack = event => {
       remoteAudio.srcObject = event.streams[0];
@@ -48,7 +46,9 @@
     };
 
     localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    for (const track of localStream.getTracks()) pc.addTrack(track, localStream);
+    const audioTrack = localStream.getAudioTracks()[0];
+    if (!audioTrack) throw new Error('MICROPHONE_TRACK_MISSING');
+    pc.addTrack(audioTrack, localStream);
 
     dataChannel = pc.createDataChannel('oai-events');
     dataChannel.onopen = () => {
@@ -58,18 +58,10 @@
     dataChannel.onmessage = event => {
       try {
         const message = JSON.parse(event.data);
-        if (message.type === 'response.audio.started' || message.type === 'response.output_audio.started') {
-          dispatchState('SPEAKING');
-        }
-        if (message.type === 'response.audio.done' || message.type === 'response.output_audio.done' || message.type === 'response.done') {
-          dispatchState('LISTENING');
-        }
-        if (message.type === 'input_audio_buffer.speech_started') {
-          dispatchState('INTERRUPTED');
-        }
-        if (message.type === 'error') {
-          dispatchState('ERROR', { error: message.error?.message || 'realtime_error' });
-        }
+        if (message.type === 'response.output_audio.started') dispatchState('SPEAKING');
+        if (message.type === 'response.output_audio.done' || message.type === 'response.done') dispatchState('LISTENING');
+        if (message.type === 'input_audio_buffer.speech_started') dispatchState('INTERRUPTED');
+        if (message.type === 'error') dispatchState('ERROR', { error: message.error?.message || 'realtime_error' });
       } catch {}
     };
 
@@ -94,13 +86,6 @@
 
     await pc.setRemoteDescription({ type: 'answer', sdp: await response.text() });
     await waitForDataChannelOpen();
-
-    try {
-      await remoteAudio.play();
-    } catch (error) {
-      dispatchState('AUDIO_BLOCKED', { error: error?.message || 'play_failed' });
-    }
-
     return { ok: true };
   }
 
@@ -111,10 +96,17 @@
 
     input.onStart?.();
     dataChannel.send(JSON.stringify({
+      type: 'conversation.item.create',
+      item: {
+        type: 'message',
+        role: 'user',
+        content: [{ type: 'input_text', text: input.text }]
+      }
+    }));
+    dataChannel.send(JSON.stringify({
       type: 'response.create',
       response: {
-        instructions: input.text,
-        modalities: ['audio']
+        output_modalities: ['audio']
       }
     }));
 
@@ -129,7 +121,6 @@
       if (remoteAudio) {
         remoteAudio.pause();
         remoteAudio.srcObject = null;
-        remoteAudio.remove();
       }
     } catch {}
     dataChannel = null;
