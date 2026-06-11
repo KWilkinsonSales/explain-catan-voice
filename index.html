@@ -3,142 +3,49 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#101827" />
-  <title>Explain It — Catan Coach</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0f1724" />
+  <title>Explain ADL — A governed explanation from Kellen</title>
+  <meta name="description" content="A brief, governed voice explanation of Adaptive Decision Logic, tailored to your world." />
   <style>
-    :root{
-      --bg:#0d1522;
-      --panel:#131f31;
-      --panel-2:#192941;
-      --text:#f6f2e9;
-      --muted:#a9b6c8;
-      --gold:#f4b860;
-      --sea:#4fb6a6;
-      --brick:#d97a5f;
-      --line:rgba(255,255,255,.09);
-      --shadow:0 30px 80px rgba(0,0,0,.36);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:'DM Sans',system-ui,sans-serif;
-      background:
-        radial-gradient(circle at 18% 10%, rgba(79,182,166,.17), transparent 28%),
-        radial-gradient(circle at 85% 20%, rgba(244,184,96,.13), transparent 25%),
-        linear-gradient(180deg,#0b1420 0%,#101827 100%);
-      color:var(--text);
-      overflow:hidden;
-    }
-    .app{height:100%;max-width:520px;margin:0 auto;position:relative;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 18px env(safe-area-inset-bottom)}
-    .topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 2px 8px}
-    .brand{display:flex;align-items:center;gap:10px}
-    .mark{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--gold),#e78b56);display:grid;place-items:center;box-shadow:0 10px 24px rgba(244,184,96,.22);font-size:18px}
-    .brand-copy strong{display:block;font-family:'Fraunces',serif;font-size:17px;letter-spacing:.1px}
-    .brand-copy span{display:block;color:var(--muted);font-size:11px;margin-top:1px}
-    .mission-pill{border:1px solid var(--line);background:rgba(255,255,255,.04);padding:8px 10px;border-radius:999px;color:var(--muted);font-size:11px}
-    .screen{flex:1;display:none;flex-direction:column;min-height:0}
-    .screen.active{display:flex}
-    .hero{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:12px 8px 22px}
-    .orb-wrap{position:relative;width:210px;height:210px;margin-bottom:30px}
-    .orb,.ring,.ring2{position:absolute;inset:0;border-radius:50%}
-    .orb{inset:32px;background:radial-gradient(circle at 35% 30%,#ffe3a7 0%,#f4b860 35%,#d97a5f 72%,#9b4d45 100%);box-shadow:0 0 70px rgba(244,184,96,.35), inset 0 -18px 38px rgba(103,39,33,.22);display:grid;place-items:center;font-size:50px;transition:.4s ease}
-    .ring{border:1px solid rgba(244,184,96,.28);animation:pulse 2.6s ease-in-out infinite}
-    .ring2{inset:18px;border:1px solid rgba(79,182,166,.18);animation:pulse 2.6s ease-in-out infinite .7s}
-    @keyframes pulse{0%,100%{transform:scale(.94);opacity:.35}50%{transform:scale(1.04);opacity:.9}}
-    h1{font-family:'Fraunces',serif;font-size:34px;line-height:1.04;margin:0 0 14px;max-width:360px}
-    .sub{font-size:15px;line-height:1.55;color:var(--muted);max-width:350px;margin:0 auto}
-    .start-card{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.035));border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px}
-    .start-btn,.primary-btn{width:100%;border:0;border-radius:18px;padding:17px 20px;font-size:16px;font-weight:700;color:#19202a;background:linear-gradient(135deg,#ffd482,var(--gold));box-shadow:0 14px 30px rgba(244,184,96,.23);cursor:pointer}
-    .hint{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
-
-    .voice-stage{flex:1;display:flex;flex-direction:column;min-height:0;padding:6px 0 14px}
-    .status-row{display:flex;justify-content:space-between;align-items:center;margin:2px 2px 12px}
-    .status{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
-    .dot{width:8px;height:8px;border-radius:50%;background:var(--sea);box-shadow:0 0 14px var(--sea)}
-    .timer{font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted)}
-    .voice-card{flex:1;min-height:0;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));border:1px solid var(--line);border-radius:28px;padding:22px 20px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;box-shadow:var(--shadow)}
-    .mini-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-    .voice-orb-wrap{position:relative;width:190px;height:190px;margin-top:10px}
-    .voice-orb{position:absolute;inset:28px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#fff0bf,#f4b860 36%,#d97a5f 71%,#7b3f4a 100%);box-shadow:0 0 60px rgba(244,184,96,.3);display:grid;place-items:center}
-    .wave{display:flex;gap:5px;align-items:center;height:58px}
-    .wave span{display:block;width:5px;border-radius:8px;background:#fff8e9;animation:bars 1s ease-in-out infinite}
-    .wave span:nth-child(2){animation-delay:.12s}.wave span:nth-child(3){animation-delay:.24s}.wave span:nth-child(4){animation-delay:.36s}.wave span:nth-child(5){animation-delay:.48s}
-    @keyframes bars{0%,100%{height:12px;opacity:.55}50%{height:45px;opacity:1}}
-    .voice-ring,.voice-ring2{position:absolute;border-radius:50%;inset:0;border:1px solid rgba(244,184,96,.25);animation:pulse 2.1s ease-in-out infinite}
-    .voice-ring2{inset:16px;border-color:rgba(79,182,166,.22);animation-delay:.5s}
-    .prompt{font-family:'Fraunces',serif;font-size:26px;line-height:1.18;text-align:center;max-width:350px;margin:10px 0 6px}
-    .caption{font-size:13px;color:var(--muted);text-align:center;max-width:360px;line-height:1.45;min-height:38px}
-    .turn-tags{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px}
-    .turn-tags button{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);padding:8px 12px;border-radius:999px;font-size:12px}
-    .controls{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:10px;width:100%;margin-top:16px}
-    .control{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);border-radius:18px;padding:13px 8px;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
-    .control.primary{background:linear-gradient(135deg,var(--sea),#327b77);border-color:transparent;font-weight:700}
-    .control.end{background:rgba(217,122,95,.12);color:#ffd6cc;border-color:rgba(217,122,95,.24)}
-    .icon{font-size:20px}
-
-    .receipt{flex:1;display:flex;flex-direction:column;justify-content:center;padding-bottom:22px}
-    .receipt-card{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.035));border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)}
-    .check{width:62px;height:62px;border-radius:20px;display:grid;place-items:center;background:rgba(79,182,166,.16);color:#8de3d6;font-size:32px;margin-bottom:18px}
-    .receipt h2{font-family:'Fraunces',serif;font-size:30px;margin:0 0 10px}
-    .receipt p{color:var(--muted);line-height:1.5;margin:0 0 18px}
-    .rows{display:grid;gap:10px}
-    .row{display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-top:1px solid var(--line);font-size:13px}
-    .row span:first-child{color:var(--muted)}
-    .row strong{text-align:right;font-weight:600}
-    .footer-note{text-align:center;color:var(--muted);font-size:11px;margin-top:12px}
-    .secondary{width:100%;margin-top:14px;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:16px;padding:14px;font-weight:600}
-
-    .camera-preview{position:absolute;inset:74px 18px 18px;border-radius:28px;background:#000;z-index:5;display:none;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow)}
-    .camera-preview.active{display:block}
-    video{width:100%;height:100%;object-fit:cover}
-    .camera-close{position:absolute;top:14px;right:14px;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.45);color:white;font-size:20px}
-    @media (max-height:700px){h1{font-size:30px}.orb-wrap{width:170px;height:170px;margin-bottom:18px}.voice-orb-wrap{width:150px;height:150px}.prompt{font-size:22px}}
+    :root{--bg:#0b1320;--bg2:#111c2d;--panel:rgba(255,255,255,.055);--line:rgba(255,255,255,.09);--text:#f5f1e8;--muted:#a8b5c8;--gold:#f1bd6c;--teal:#55b7aa;--rose:#d77d68;--shadow:0 30px 90px rgba(0,0,0,.4)}
+    *{box-sizing:border-box}html,body{height:100%}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:radial-gradient(circle at 18% 8%,rgba(85,183,170,.16),transparent 27%),radial-gradient(circle at 85% 18%,rgba(241,189,108,.13),transparent 24%),linear-gradient(180deg,var(--bg),var(--bg2));overflow:hidden}
+    button{font:inherit}.app{height:100%;max-width:540px;margin:0 auto;padding:env(safe-area-inset-top) 18px env(safe-area-inset-bottom);display:flex;flex-direction:column;position:relative}.top{display:flex;justify-content:space-between;align-items:center;padding:16px 2px 8px}.brand{display:flex;gap:10px;align-items:center}.mark{width:36px;height:36px;border-radius:13px;background:linear-gradient(135deg,var(--gold),#db8e5a);display:grid;place-items:center;color:#1b2430;font-weight:900;box-shadow:0 12px 28px rgba(241,189,108,.24)}.brand strong{display:block;font-family:Georgia,serif;font-size:18px}.brand span,.pill{font-size:11px;color:var(--muted)}.pill{border:1px solid var(--line);background:rgba(255,255,255,.035);padding:8px 10px;border-radius:999px}.screen{display:none;flex:1;min-height:0;flex-direction:column}.screen.active{display:flex}.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 8px 22px}.orb-wrap{position:relative;width:220px;height:220px;margin-bottom:30px}.orb,.ring,.ring2{position:absolute;border-radius:50%}.ring{inset:0;border:1px solid rgba(241,189,108,.28);animation:pulse 2.7s ease-in-out infinite}.ring2{inset:20px;border:1px solid rgba(85,183,170,.22);animation:pulse 2.7s ease-in-out infinite .7s}.orb{inset:38px;background:radial-gradient(circle at 35% 30%,#fff0c8,#efbc6e 35%,#d77d68 70%,#743d52 100%);box-shadow:0 0 80px rgba(241,189,108,.32),inset 0 -16px 35px rgba(58,22,32,.24);display:grid;place-items:center;font-size:48px}@keyframes pulse{0%,100%{transform:scale(.95);opacity:.35}50%{transform:scale(1.04);opacity:.9}}h1{font-family:Georgia,serif;font-size:36px;line-height:1.02;max-width:390px;margin:0 0 14px}.sub{color:var(--muted);font-size:15px;line-height:1.55;max-width:390px;margin:0}.card{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px}.start{width:100%;border:0;border-radius:18px;padding:17px 20px;font-weight:800;font-size:16px;color:#1a222d;background:linear-gradient(135deg,#ffd891,var(--gold));cursor:pointer}.hint{text-align:center;color:var(--muted);font-size:12px;margin-top:10px}.voice-stage{flex:1;display:flex;flex-direction:column;min-height:0;padding:6px 0 14px}.status-row{display:flex;justify-content:space-between;align-items:center;margin:3px 2px 12px;color:var(--muted);font-size:12px}.status{display:flex;align-items:center;gap:8px}.dot{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 14px var(--teal)}.voice-card{flex:1;min-height:0;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:22px 20px;display:flex;flex-direction:column;align-items:center;justify-content:space-between}.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}.voice-orb{position:relative;width:188px;height:188px}.voice-orb:before,.voice-orb:after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(241,189,108,.24);inset:0;animation:pulse 2.2s ease-in-out infinite}.voice-orb:after{inset:17px;border-color:rgba(85,183,170,.2);animation-delay:.5s}.voice-core{position:absolute;inset:29px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#fff0c8,#efbc6e 35%,#d77d68 70%,#743d52 100%);display:grid;place-items:center;box-shadow:0 0 65px rgba(241,189,108,.3)}.bars{height:58px;display:flex;gap:5px;align-items:center}.bars i{display:block;width:5px;border-radius:8px;background:#fff8ec;animation:bars 1s ease-in-out infinite}.bars i:nth-child(2){animation-delay:.12s}.bars i:nth-child(3){animation-delay:.24s}.bars i:nth-child(4){animation-delay:.36s}.bars i:nth-child(5){animation-delay:.48s}@keyframes bars{0%,100%{height:12px;opacity:.55}50%{height:45px;opacity:1}}.prompt{font-family:Georgia,serif;font-size:27px;line-height:1.18;text-align:center;max-width:390px;margin:10px 0 7px}.caption{text-align:center;color:var(--muted);font-size:13px;line-height:1.5;max-width:390px;min-height:42px}.controls{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:10px;width:100%;margin-top:16px}.control{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);border-radius:17px;padding:13px 8px;display:flex;flex-direction:column;gap:5px;align-items:center;font-size:12px;cursor:pointer}.control.primary{background:linear-gradient(135deg,var(--teal),#337d77);border-color:transparent;font-weight:800}.control.end{background:rgba(215,125,104,.11);color:#ffd8ce;border-color:rgba(215,125,104,.22)}.icon{font-size:20px}.input-wrap{display:none;width:100%;margin-top:12px;gap:8px}.input-wrap.active{display:flex}.input-wrap input{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.045);color:var(--text);padding:12px 14px;border-radius:14px;outline:none}.input-wrap button{border:0;border-radius:14px;padding:0 14px;background:var(--gold);font-weight:800}.receipt{flex:1;display:flex;align-items:center}.receipt-card{width:100%;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:24px}.check{width:62px;height:62px;border-radius:20px;background:rgba(85,183,170,.15);color:#93e4d8;display:grid;place-items:center;font-size:32px;margin-bottom:18px}.receipt h2{font-family:Georgia,serif;font-size:31px;margin:0 0 10px}.receipt p{margin:0 0 18px;color:var(--muted);line-height:1.5}.row{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid var(--line);font-size:13px}.row span{color:var(--muted)}.row strong{text-align:right}.secondary{width:100%;margin-top:15px;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:16px;padding:14px;font-weight:700}.foot{text-align:center;color:var(--muted);font-size:11px;margin-top:12px}@media(max-height:700px){h1{font-size:31px}.orb-wrap{width:175px;height:175px;margin-bottom:18px}.voice-orb{width:150px;height:150px}.prompt{font-size:23px}}
   </style>
 </head>
 <body>
   <main class="app">
-    <header class="topbar">
-      <div class="brand">
-        <div class="mark">✦</div>
-        <div class="brand-copy"><strong>Explain It</strong><span>Temporary voice mission</span></div>
-      </div>
-      <div class="mission-pill">Catan Coach · 2 min</div>
+    <header class="top">
+      <div class="brand"><div class="mark">✦</div><div><strong>Explain It</strong><span>Governed understanding from Kellen</span></div></div>
+      <div class="pill">Founder Envoy · 3 min</div>
     </header>
 
     <section id="startScreen" class="screen active">
       <div class="hero">
-        <div class="orb-wrap" aria-hidden="true"><div class="ring"></div><div class="ring2"></div><div class="orb">🎲</div></div>
-        <h1>Your Catan Coach is ready</h1>
-        <p class="sub">A quick voice mission for Jonas and Sam. Ask questions, learn one smart idea each, then get back to the game.</p>
+        <div class="orb-wrap"><div class="ring"></div><div class="ring2"></div><div class="orb">⚡</div></div>
+        <h1>A governed explanation from Kellen</h1>
+        <p class="sub">A short voice experience built around your world—not a chatbot, not a pitch.</p>
       </div>
-      <div class="start-card">
-        <button id="startBtn" class="start-btn">Start voice mission</button>
-        <div class="hint">Microphone required · camera optional · no transcript saved</div>
+      <div class="card">
+        <button id="startBtn" class="start">Start the explanation</button>
+        <div class="hint">Microphone recommended · no transcript saved by default</div>
       </div>
     </section>
 
     <section id="voiceScreen" class="screen">
       <div class="voice-stage">
-        <div class="status-row"><div class="status"><span class="dot"></span><span id="statusText">Coach speaking</span></div><div id="timer" class="timer">00:00</div></div>
+        <div class="status-row"><div class="status"><span class="dot"></span><span id="statusText">Envoy speaking</span></div><div id="timer">00:00</div></div>
         <div class="voice-card">
-          <div class="mini-label">Mission in progress</div>
-          <div class="voice-orb-wrap" aria-hidden="true">
-            <div class="voice-ring"></div><div class="voice-ring2"></div>
-            <div class="voice-orb"><div class="wave"><span></span><span></span><span></span><span></span><span></span></div></div>
-          </div>
+          <div class="eyebrow">Kellen’s Explain It</div>
+          <div class="voice-orb"><div class="voice-core"><div class="bars"><i></i><i></i><i></i><i></i><i></i></div></div></div>
           <div>
-            <div id="prompt" class="prompt">Hey Jonas and Sam—ready to build your island?</div>
-            <div id="caption" class="caption">I’ll keep this quick. Each of you gets one question, one useful tip, and then you’re back to the game.</div>
-            <div class="turn-tags"><button data-speaker="Jonas">Jonas</button><button data-speaker="Sam">Sam</button><button data-speaker="Both">Both</button></div>
+            <div id="prompt" class="prompt">Hi. Kellen asked me to explain ADL in a way that connects to your world.</div>
+            <div id="caption" class="caption">I’m not a chatbot and I’m not here to pitch you. I have one short job: ask a couple of questions, use what you tell me, and show you why ADL starts to feel inevitable once decisions become consequential.</div>
           </div>
+          <div id="inputWrap" class="input-wrap"><input id="answerInput" placeholder="Type a short answer if voice isn’t available"/><button id="sendAnswer">Send</button></div>
           <div class="controls">
-            <button id="cameraBtn" class="control"><span class="icon">📷</span><span>Show board</span></button>
-            <button id="listenBtn" class="control primary"><span class="icon">🎙️</span><span>Listening</span></button>
-            <button id="endBtn" class="control end"><span class="icon">■</span><span>End mission</span></button>
+            <button id="typeBtn" class="control"><span class="icon">⌨️</span><span>Type instead</span></button>
+            <button id="nextBtn" class="control primary"><span class="icon">🎙️</span><span>Continue</span></button>
+            <button id="endBtn" class="control end"><span class="icon">■</span><span>End</span></button>
           </div>
         </div>
       </div>
@@ -148,56 +55,44 @@
       <div class="receipt">
         <div class="receipt-card">
           <div class="check">✓</div>
-          <h2>Mission complete</h2>
-          <p>The Coach closed the room and kept only this minimal parent receipt.</p>
-          <div class="rows">
-            <div class="row"><span>Jonas</span><strong id="jonasReceipt">Participated · road strategy</strong></div>
-            <div class="row"><span>Sam</span><strong id="samReceipt">Participated · resource strategy</strong></div>
-            <div class="row"><span>Understanding</span><strong>Confirmed</strong></div>
-            <div class="row"><span>Final state</span><strong>Completed</strong></div>
-          </div>
-          <button id="restartBtn" class="secondary">Start a new mission</button>
+          <h2>Explanation complete</h2>
+          <p>The temporary room is closed. Only this minimal handoff summary remains.</p>
+          <div class="row"><span>Decision environment</span><strong id="decisionReceipt">Consequential moment surfaced</strong></div>
+          <div class="row"><span>Hover signal</span><strong id="hoverReceipt">Observed</strong></div>
+          <div class="row"><span>Handoff</span><strong id="handoffReceipt">Question for Kellen</strong></div>
+          <div class="row"><span>Final state</span><strong>Completed</strong></div>
+          <button id="restartBtn" class="secondary">Start a new explanation</button>
         </div>
-        <div class="footer-note">Understanding persisted. Temporary conversation context was cleared.</div>
+        <div class="foot">Understanding persisted. Temporary conversation context was cleared.</div>
       </div>
     </section>
-
-    <div id="cameraPreview" class="camera-preview"><video id="video" autoplay playsinline muted></video><button id="cameraClose" class="camera-close">×</button></div>
   </main>
 
   <script>
     const screens={start:document.getElementById('startScreen'),voice:document.getElementById('voiceScreen'),receipt:document.getElementById('receiptScreen')};
-    const promptEl=document.getElementById('prompt'), captionEl=document.getElementById('caption'), statusText=document.getElementById('statusText');
-    const missionLines=[
-      ["Hey Jonas and Sam—ready to build your island?","I’ll keep this quick. Each of you gets one question, one useful tip, and then you’re back to the game."],
-      ["Jonas, pick one: giant city or longest road?","Say your choice out loud, then ask me one Catan question."],
-      ["Nice choice, Jonas.","That tells me whether your best next idea is expansion or stronger production."],
-      ["Sam, rare resource or lots of different resources?","Pick one, then ask me your best strategy question."],
-      ["Good thinking, Sam.","That choice changes how much you should depend on trades and ports."],
-      ["Quick check before I go.","Jonas: what do cities do? Sam: what makes a trade useful?"],
-      ["Any last question—or anything you want me to tell Dad?","Then I’ll close the mission so you can keep playing."],
-      ["Awesome work, both of you.","Keep building, trade carefully, and have fun. Catan Coach mission complete—goodbye!"]
+    const promptEl=document.getElementById('prompt'),captionEl=document.getElementById('caption'),statusText=document.getElementById('statusText');
+    const lines=[
+      ["Hi. Kellen asked me to explain ADL in a way that connects to your world.","I’m not a chatbot and I’m not here to pitch you. I have one short job: ask a couple of questions, use what you tell me, and show you why ADL starts to feel inevitable once decisions become consequential."],
+      ["In your world, where does a decision look simple on paper but become messy once real people touch it?","Think of one real moment—something with pressure, disagreement, delay, or consequences."],
+      ["That visible decision is only the surface.","Underneath it are different responsibilities, missing context, and consequences forming before anyone has a complete view."],
+      ["This is where ADL becomes inevitable.","Once a decision matters, incomplete context, competing responsibilities, and consequences outrunning the record appear whether anyone designed for them or not."],
+      ["Give me the decision in one sentence.","I’ll show you what is visible, what is hidden, who has standing, what context is missing, and what must be understood before anyone acts."],
+      ["The decision was never just the decision.","It was the environment around it. ADL does not make the choice for you—it makes that environment visible before consequence hardens."],
+      ["What part of that feels most relevant—or most wrong—to you?","You can also leave a question for Kellen or ask for more information or time with him."],
+      ["I’ve got it.","I’ll bring the handoff back to Kellen. Explanation complete—and this temporary room is now closing."]
     ];
-    let idx=0,timerInt,startTime,stream;
+    let idx=0,startTime,timerInt,answers=[];
     function show(name){Object.values(screens).forEach(s=>s.classList.remove('active'));screens[name].classList.add('active')}
-    function speak(text){
-      if('speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=1.02;u.pitch=1.03;u.volume=1;u.onstart=()=>statusText.textContent='Coach speaking';u.onend=()=>statusText.textContent='Listening';speechSynthesis.speak(u)}
-    }
-    function setLine(i){const [p,c]=missionLines[i];promptEl.textContent=p;captionEl.textContent=c;speak(p+' '+c)}
-    function nextLine(){idx=Math.min(idx+1,missionLines.length-1);setLine(idx)}
-    document.getElementById('startBtn').addEventListener('click',async()=>{
-      show('voice');startTime=Date.now();timerInt=setInterval(()=>{const s=Math.floor((Date.now()-startTime)/1000);document.getElementById('timer').textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`},1000);
-      try{await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){statusText.textContent='Mic permission needed'}
-      setLine(0);setTimeout(nextLine,4800)
-    });
-    document.querySelectorAll('[data-speaker]').forEach(b=>b.addEventListener('click',()=>{statusText.textContent=b.dataset.speaker+' speaking';setTimeout(()=>{nextLine();statusText.textContent='Listening'},700)}));
-    document.getElementById('listenBtn').addEventListener('click',()=>nextLine());
-    document.getElementById('endBtn').addEventListener('click',()=>{clearInterval(timerInt);speechSynthesis.cancel();show('receipt')});
-    document.getElementById('restartBtn').addEventListener('click',()=>{idx=0;show('start')});
-    document.getElementById('cameraBtn').addEventListener('click',async()=>{
-      try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});document.getElementById('video').srcObject=stream;document.getElementById('cameraPreview').classList.add('active')}catch(e){alert('Camera access is unavailable on this device.')}
-    });
-    document.getElementById('cameraClose').addEventListener('click',()=>{document.getElementById('cameraPreview').classList.remove('active');if(stream)stream.getTracks().forEach(t=>t.stop())});
+    function speak(text){if('speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=.98;u.pitch=1;u.onstart=()=>statusText.textContent='Envoy speaking';u.onend=()=>statusText.textContent='Listening';speechSynthesis.speak(u)}}
+    function setLine(i){const [p,c]=lines[i];promptEl.textContent=p;captionEl.textContent=c;speak(p+' '+c)}
+    function next(){idx=Math.min(idx+1,lines.length-1);setLine(idx);if(idx===lines.length-1)setTimeout(finish,4200)}
+    function finish(){clearInterval(timerInt);speechSynthesis.cancel();if(answers[0])document.getElementById('decisionReceipt').textContent=answers[0].slice(0,44)+(answers[0].length>44?'…':'');show('receipt')}
+    document.getElementById('startBtn').onclick=async()=>{show('voice');startTime=Date.now();timerInt=setInterval(()=>{const s=Math.floor((Date.now()-startTime)/1000);document.getElementById('timer').textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`},1000);try{await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){statusText.textContent='Voice unavailable · type or continue'}setLine(0);setTimeout(next,6500)};
+    document.getElementById('nextBtn').onclick=next;
+    document.getElementById('typeBtn').onclick=()=>document.getElementById('inputWrap').classList.toggle('active');
+    document.getElementById('sendAnswer').onclick=()=>{const input=document.getElementById('answerInput');if(input.value.trim()){answers.push(input.value.trim());input.value='';next()}};
+    document.getElementById('endBtn').onclick=finish;
+    document.getElementById('restartBtn').onclick=()=>{idx=0;answers=[];show('start')};
   </script>
 </body>
 </html>
