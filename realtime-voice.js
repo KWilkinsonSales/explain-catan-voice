@@ -10,16 +10,41 @@
     return window.EXPLAIN_API.replace(/\/$/, '');
   }
 
+  function dispatchState(state, detail = {}) {
+    window.dispatchEvent(new CustomEvent('explain:realtime-state', { detail: { state, ...detail } }));
+  }
+
+  function waitForDataChannelOpen(timeoutMs = 10000) {
+    return new Promise((resolve, reject) => {
+      if (dataChannel?.readyState === 'open') return resolve();
+      const timeout = setTimeout(() => reject(new Error('REALTIME_DATA_CHANNEL_TIMEOUT')), timeoutMs);
+      const onOpen = () => {
+        clearTimeout(timeout);
+        dataChannel?.removeEventListener('open', onOpen);
+        resolve();
+      };
+      dataChannel?.addEventListener('open', onOpen, { once: true });
+    });
+  }
+
   async function connect({ recipientDisplayName = '', roleOrContext = '', approvedContext = '' } = {}) {
     stop();
+    dispatchState('CONNECTING');
 
     pc = new RTCPeerConnection();
     remoteAudio = document.createElement('audio');
     remoteAudio.autoplay = true;
     remoteAudio.playsInline = true;
+    remoteAudio.muted = false;
+    remoteAudio.volume = 1;
+    remoteAudio.style.display = 'none';
+    document.body.appendChild(remoteAudio);
+
     pc.ontrack = event => {
       remoteAudio.srcObject = event.streams[0];
-      remoteAudio.play().catch(() => {});
+      remoteAudio.play().catch(error => {
+        dispatchState('AUDIO_BLOCKED', { error: error?.message || 'play_failed' });
+      });
     };
 
     localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -28,19 +53,22 @@
     dataChannel = pc.createDataChannel('oai-events');
     dataChannel.onopen = () => {
       connected = true;
-      window.dispatchEvent(new CustomEvent('explain:realtime-state', { detail: { state: 'LISTENING' } }));
+      dispatchState('LISTENING');
     };
     dataChannel.onmessage = event => {
       try {
         const message = JSON.parse(event.data);
-        if (message.type === 'response.audio.started') {
-          window.dispatchEvent(new CustomEvent('explain:realtime-state', { detail: { state: 'SPEAKING' } }));
+        if (message.type === 'response.audio.started' || message.type === 'response.output_audio.started') {
+          dispatchState('SPEAKING');
         }
-        if (message.type === 'response.audio.done' || message.type === 'response.done') {
-          window.dispatchEvent(new CustomEvent('explain:realtime-state', { detail: { state: 'LISTENING' } }));
+        if (message.type === 'response.audio.done' || message.type === 'response.output_audio.done' || message.type === 'response.done') {
+          dispatchState('LISTENING');
         }
         if (message.type === 'input_audio_buffer.speech_started') {
-          window.dispatchEvent(new CustomEvent('explain:realtime-state', { detail: { state: 'INTERRUPTED' } }));
+          dispatchState('INTERRUPTED');
+        }
+        if (message.type === 'error') {
+          dispatchState('ERROR', { error: message.error?.message || 'realtime_error' });
         }
       } catch {}
     };
@@ -65,6 +93,14 @@
     }
 
     await pc.setRemoteDescription({ type: 'answer', sdp: await response.text() });
+    await waitForDataChannelOpen();
+
+    try {
+      await remoteAudio.play();
+    } catch (error) {
+      dispatchState('AUDIO_BLOCKED', { error: error?.message || 'play_failed' });
+    }
+
     return { ok: true };
   }
 
@@ -93,6 +129,7 @@
       if (remoteAudio) {
         remoteAudio.pause();
         remoteAudio.srcObject = null;
+        remoteAudio.remove();
       }
     } catch {}
     dataChannel = null;
@@ -100,7 +137,7 @@
     localStream = null;
     remoteAudio = null;
     connected = false;
-    window.dispatchEvent(new CustomEvent('explain:realtime-state', { detail: { state: 'CLOSED' } }));
+    dispatchState('CLOSED');
   }
 
   window.ExplainRealtimeVoice = { connect, speak, stop };
