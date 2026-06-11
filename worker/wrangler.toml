@@ -1,14 +1,10 @@
-name = "explain-mission-api"
+name = "explain-runtime"
 main = "src/index.js"
 compatibility_date = "2026-06-10"
 
-# Create the KV namespace with:
-# wrangler kv namespace create EXPLAIN_MISSIONS
-# Then paste the returned id below.
-
 [[kv_namespaces]]
 binding = "EXPLAIN_MISSIONS"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "fa4cc550dcd94805aeb0e71313b38bef"
 
 [vars]
 ALLOWED_ORIGIN = "https://kwilkinsonsales.github.io"
