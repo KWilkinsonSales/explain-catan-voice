@@ -87,14 +87,39 @@
     let idx=0,startTime,timerInt=null,answers=[],handoff=false;
     let pendingTimeouts=[];
     let finishing=false;
+    let microphoneStream=null;
+    let activeMissionId=null;
+    let isRecording=false;
+    let isSpeaking=false;
 
     function schedule(fn,ms){
       const id=setTimeout(()=>{
         pendingTimeouts=pendingTimeouts.filter(x=>x!==id);
+        if(!activeMissionId||finishing)return;
         fn();
       },ms);
       pendingTimeouts.push(id);
       return id;
+    }
+
+    function stopMicrophone(){
+      if(!microphoneStream)return;
+      microphoneStream.getTracks().forEach(track=>track.stop());
+      microphoneStream=null;
+      isRecording=false;
+    }
+
+    async function startMicrophone(){
+      stopMicrophone();
+      try{
+        microphoneStream=await navigator.mediaDevices.getUserMedia({audio:true});
+        isRecording=true;
+        return true;
+      }catch(err){
+        microphoneStream=null;
+        isRecording=false;
+        return false;
+      }
     }
 
     function stopAllRuntimeActivity(){
@@ -102,6 +127,9 @@
       pendingTimeouts.forEach(clearTimeout);
       pendingTimeouts=[];
       if('speechSynthesis' in window)speechSynthesis.cancel();
+      stopMicrophone();
+      activeMissionId=null;
+      isSpeaking=false;
       ExplainSkinEngine.clearCue();
       statusText.textContent='Ready';
     }
@@ -144,19 +172,42 @@
     ];
 
     function show(name){Object.values(screens).forEach(s=>s.classList.remove('active'));screens[name].classList.add('active')}
-    function speak(text){if('speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=.92;u.pitch=.98;u.onstart=()=>{statusText.textContent='Envoy speaking';ExplainSkinEngine.setRoomState('speaking')};u.onend=()=>{statusText.textContent='Listening';ExplainSkinEngine.setRoomState('listening')};speechSynthesis.speak(u)}}
+    function speak(text){
+      if(!activeMissionId||finishing)return;
+      if('speechSynthesis' in window){
+        speechSynthesis.cancel();
+        const missionIdAtStart=activeMissionId;
+        const u=new SpeechSynthesisUtterance(text);
+        u.rate=.92;
+        u.pitch=.98;
+        u.onstart=()=>{
+          if(activeMissionId!==missionIdAtStart||finishing)return;
+          isSpeaking=true;
+          statusText.textContent='Envoy speaking';
+          ExplainSkinEngine.setRoomState('speaking');
+        };
+        u.onend=()=>{
+          if(activeMissionId!==missionIdAtStart||finishing)return;
+          isSpeaking=false;
+          statusText.textContent=isRecording?'Listening':'Ready';
+          ExplainSkinEngine.setRoomState(isRecording?'listening':'hover');
+        };
+        speechSynthesis.speak(u);
+      }
+    }
     function setLine(i){const [p,c,cue]=lines()[i];promptEl.textContent=p;captionEl.textContent=c;if(cue)ExplainSkinEngine.renderCue(cue);else ExplainSkinEngine.clearCue();speak(p+' '+c)}
-    function next(){if(finishing)return;idx=Math.min(idx+1,lines().length-1);setLine(idx);if(idx===lines().length-1)schedule(finish,4200)}
+    function next(){if(finishing||!activeMissionId)return;idx=Math.min(idx+1,lines().length-1);setLine(idx);if(idx===lines().length-1)schedule(finish,4200)}
 
     async function finish(){
       if(finishing)return;
       finishing=true;
+      const missionIdAtFinish=activeMissionId;
       stopAllRuntimeActivity();
       ExplainSkinEngine.setRoomState('close');
       const primary=answers[0]||null;
       const last=answers[answers.length-1]||'';
       handoff=/meeting|call|time|more info|demo|kellen|follow up/i.test(last);
-      if(inviteToken){
+      if(inviteToken&&missionIdAtFinish){
         try{
           await ExplainAPI.writeReceipt(inviteToken,{summary:primary||'Consequential moment surfaced',handoffType:handoff?'follow_up':null,primaryQuestion:last||null,outcomeCode:handoff?'handoff_requested':'closed_no_handoff',hoverSignal:Boolean(primary),idempotencyKey:`close:${inviteToken}`});
         }catch(err){console.error(err);}
@@ -169,12 +220,14 @@
     document.getElementById('startBtn').onclick=async()=>{
       stopAllRuntimeActivity();
       finishing=false;
+      activeMissionId=mission?.missionId||`local-${Date.now()}`;
       if(inviteToken){try{await ExplainAPI.setMissionState(inviteToken,'running')}catch(err){}}
       show('voice');
       ExplainSkinEngine.setRoomState('speaking');
       startTime=Date.now();
       timerInt=setInterval(()=>{const s=Math.floor((Date.now()-startTime)/1000);document.getElementById('timer').textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`},1000);
-      try{await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){statusText.textContent='Voice unavailable · type or continue'}
+      const micOk=await startMicrophone();
+      if(!micOk)statusText.textContent='Voice unavailable · type or continue';
       setLine(0);
       schedule(next,6500);
     };
