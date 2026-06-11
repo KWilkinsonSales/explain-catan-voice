@@ -22,8 +22,8 @@
     <section id="startScreen" class="screen active">
       <div class="hero">
         <div class="orb-wrap"><div class="ring"></div><div class="ring2"></div><div class="orb">⚡</div></div>
-        <h1>A governed explanation from Kellen</h1>
-        <p class="sub">A short voice experience built around your world—not a chatbot, not a pitch.</p>
+        <h1 id="startTitle">A governed explanation from Kellen</h1>
+        <p id="startSubtitle" class="sub">A short voice experience built around your world—not a chatbot, not a pitch.</p>
       </div>
       <div class="card">
         <button id="startBtn" class="start">Start the explanation</button>
@@ -59,7 +59,7 @@
           <p>The temporary room is closed. Only this minimal handoff summary remains.</p>
           <div class="row"><span>Decision environment</span><strong id="decisionReceipt">Consequential moment surfaced</strong></div>
           <div class="row"><span>Hover signal</span><strong id="hoverReceipt">Observed</strong></div>
-          <div class="row"><span>Handoff</span><strong id="handoffReceipt">Question for Kellen</strong></div>
+          <div class="row"><span>Handoff</span><strong id="handoffReceipt">None</strong></div>
           <div class="row"><span>Final state</span><strong>Completed</strong></div>
           <button id="restartBtn" class="secondary">Start a new explanation</button>
         </div>
@@ -68,11 +68,23 @@
     </section>
   </main>
 
+  <script src="mission.js"></script>
   <script>
     const screens={start:document.getElementById('startScreen'),voice:document.getElementById('voiceScreen'),receipt:document.getElementById('receiptScreen')};
     const promptEl=document.getElementById('prompt'),captionEl=document.getElementById('caption'),statusText=document.getElementById('statusText');
+    const params=new URLSearchParams(location.search);
+    const inviteToken=params.get('i');
+    let mission=inviteToken?ExplainMission.getByInvite(inviteToken):null;
+    if(!mission){mission=ExplainMission.create({topic:'Explain ADL'})}
+    const recipient=mission.recipient;
+    const role=mission.approvedContext?.role||'';
+    const notes=mission.approvedContext?.notes||'';
+    if(recipient){document.getElementById('startTitle').textContent=`A governed explanation for ${recipient}`}
+    if(role){document.getElementById('startSubtitle').textContent=`Built around your world as ${role}—not a chatbot, not a pitch.`}
+    const opening=recipient?`Hi ${recipient}. Kellen asked me to explain ADL in a way that connects to your world.`:'Hi. Kellen asked me to explain ADL in a way that connects to your world.';
+    const contextLine=role?`Kellen shared a little context so I could make this relevant to your role as ${role}.`:'';
     const lines=[
-      ["Hi. Kellen asked me to explain ADL in a way that connects to your world.","I’m not a chatbot and I’m not here to pitch you. I have one short job: ask a couple of questions, use what you tell me, and show you why ADL starts to feel inevitable once decisions become consequential."],
+      [opening,`${contextLine} I’m not a chatbot and I’m not here to pitch you. I have one short job: ask a couple of questions, use what you tell me, and show you why ADL starts to feel inevitable once decisions become consequential.`],
       ["In your world, where does a decision look simple on paper but become messy once real people touch it?","Think of one real moment—something with pressure, disagreement, delay, or consequences."],
       ["That visible decision is only the surface.","Underneath it are different responsibilities, missing context, and consequences forming before anyone has a complete view."],
       ["This is where ADL becomes inevitable.","Once a decision matters, incomplete context, competing responsibilities, and consequences outrunning the record appear whether anyone designed for them or not."],
@@ -81,18 +93,18 @@
       ["What part of that feels most relevant—or most wrong—to you?","You can also leave a question for Kellen or ask for more information or time with him."],
       ["I’ve got it.","I’ll bring the handoff back to Kellen. Explanation complete—and this temporary room is now closing."]
     ];
-    let idx=0,startTime,timerInt,answers=[];
+    let idx=0,startTime,timerInt,answers=[],handoff=false;
     function show(name){Object.values(screens).forEach(s=>s.classList.remove('active'));screens[name].classList.add('active')}
     function speak(text){if('speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=.98;u.pitch=1;u.onstart=()=>statusText.textContent='Envoy speaking';u.onend=()=>statusText.textContent='Listening';speechSynthesis.speak(u)}}
     function setLine(i){const [p,c]=lines[i];promptEl.textContent=p;captionEl.textContent=c;speak(p+' '+c)}
     function next(){idx=Math.min(idx+1,lines.length-1);setLine(idx);if(idx===lines.length-1)setTimeout(finish,4200)}
-    function finish(){clearInterval(timerInt);speechSynthesis.cancel();if(answers[0])document.getElementById('decisionReceipt').textContent=answers[0].slice(0,44)+(answers[0].length>44?'…':'');show('receipt')}
-    document.getElementById('startBtn').onclick=async()=>{show('voice');startTime=Date.now();timerInt=setInterval(()=>{const s=Math.floor((Date.now()-startTime)/1000);document.getElementById('timer').textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`},1000);try{await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){statusText.textContent='Voice unavailable · type or continue'}setLine(0);setTimeout(next,6500)};
+    function finish(){clearInterval(timerInt);speechSynthesis.cancel();const primary=answers[0]||null;const last=answers[answers.length-1]||'';handoff=/meeting|call|time|more info|demo|kellen|follow up/i.test(last);const closed=ExplainMission.close(mission.missionId,{issuer:mission.issuer,recipient:mission.recipient,topic:mission.topic,startedAt:mission.startedAt,hoverSignal:Boolean(primary),handoffRequested:handoff,handoffType:handoff?'follow_up':null,primaryQuestion:last||null,outcomeCode:handoff?'handoff_requested':'closed_no_handoff'});mission=closed;if(primary)document.getElementById('decisionReceipt').textContent=primary.slice(0,44)+(primary.length>44?'…':'');document.getElementById('handoffReceipt').textContent=handoff?'Requested':'None';show('receipt')}
+    document.getElementById('startBtn').onclick=async()=>{mission=ExplainMission.start(mission.missionId)||mission;show('voice');startTime=Date.now();timerInt=setInterval(()=>{const s=Math.floor((Date.now()-startTime)/1000);document.getElementById('timer').textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`},1000);try{await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){statusText.textContent='Voice unavailable · type or continue'}setLine(0);setTimeout(next,6500)};
     document.getElementById('nextBtn').onclick=next;
     document.getElementById('typeBtn').onclick=()=>document.getElementById('inputWrap').classList.toggle('active');
     document.getElementById('sendAnswer').onclick=()=>{const input=document.getElementById('answerInput');if(input.value.trim()){answers.push(input.value.trim());input.value='';next()}};
     document.getElementById('endBtn').onclick=finish;
-    document.getElementById('restartBtn').onclick=()=>{idx=0;answers=[];show('start')};
+    document.getElementById('restartBtn').onclick=()=>{mission=ExplainMission.create({topic:'Explain ADL'});idx=0;answers=[];handoff=false;show('start')};
   </script>
 </body>
 </html>
