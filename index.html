@@ -9,14 +9,14 @@
   <style>
     :root{--skin-field:#07080B;--skin-field-2:#111C2D;--skin-gold:#C9A24A;--skin-teal:#2BB3A9;--skin-text:#EDEFF3;--skin-muted:#A7AFBD;--skin-gold-soft:rgba(201,162,74,.18);--skin-teal-soft:rgba(43,179,169,.18);--skin-primary-font:Georgia,serif;--skin-body-font:Inter,system-ui,sans-serif;--skin-motion-ease:cubic-bezier(.22,.61,.36,1);--skin-reveal-ms:420ms;--skin-close-ms:520ms;--line:rgba(255,255,255,.09);--rose:#d77d68;--shadow:0 30px 90px rgba(0,0,0,.4)}
     *{box-sizing:border-box}html,body{height:100%}body{margin:0;font-family:var(--skin-body-font);color:var(--skin-text);background:radial-gradient(circle at 18% 8%,var(--skin-teal-soft),transparent 27%),radial-gradient(circle at 85% 18%,var(--skin-gold-soft),transparent 24%),linear-gradient(180deg,var(--skin-field),var(--skin-field-2));overflow:hidden;transition:background var(--skin-reveal-ms) var(--skin-motion-ease)}
-    button{font:inherit}.app{height:100%;max-width:540px;margin:0 auto;padding:env(safe-area-inset-top) 18px env(safe-area-inset-bottom);display:flex;flex-direction:column;position:relative}.top{display:flex;justify-content:space-between;align-items:center;padding:16px 2px 8px}.brand{display:flex;gap:10px;align-items:center}.mark{width:36px;height:36px;border-radius:13px;background:linear-gradient(135deg,var(--skin-gold),#db8e5a);display:grid;place-items:center;color:#1b2430;font-weight:900;box-shadow:0 12px 28px var(--skin-gold-soft)}.brand strong{display:block;font-family:var(--skin-primary-font);font-size:18px}.brand span,.pill{font-size:11px;color:var(--skin-muted)}.pill{border:1px solid var(--line);background:rgba(255,255,255,.035);padding:8px 10px;border-radius:999px}.screen{display:none;flex:1;min-height:0;flex-direction:column}.screen.active{display:flex}.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 8px 22px}.orb-wrap{position:relative;width:220px;height:220px;margin-bottom:30px}.orb,.ring,.ring2{position:absolute;border-radius:50%}.ring{inset:0;border:1px solid color-mix(in srgb,var(--skin-gold) 28%,transparent);animation:pulse 2.7s ease-in-out infinite}.ring2{inset:20px;border:1px solid color-mix(in srgb,var(--skin-teal) 22%,transparent);animation:pulse 2.7s ease-in-out infinite .7s}.orb{inset:38px;background:radial-gradient(circle at 35% 30%,#fff0c8,var(--skin-gold) 35%,#d77d68 70%,#743d52 100%);box-shadow:0 0 80px var(--skin-gold-soft),inset 0 -16px 35px rgba(58,22,32,.24);display:grid;place-items:center;font-size:48px}@keyframes pulse{0%,100%{transform:scale(.95);opacity:.35}50%{transform:scale(1.04);opacity:.9}}h1{font-family:var(--skin-primary-font);font-size:36px;line-height:1.02;max-width:390px;margin:0 0 14px}.sub{color:var(--skin-muted);font-size:15px;line-height:1.55;max-width:390px;margin:0}.card{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px}.start{width:100%;border:0;border-radius:18px;padding:17px 20px;font-weight:800;font-size:16px;color:#1a222d;background:linear-gradient(135deg,#ffd891,var(--skin-gold));cursor:pointer}.hint{text-align:center;color:var(--skin-muted);font-size:12px;margin-top:10px}.voice-stage{flex:1;display:flex;flex-direction:column;min-height:0;padding:6px 0 14px}.status-row{display:flex;justify-content:space-between;align-items:center;margin:3px 2px 12px;color:var(--skin-muted);font-size:12px}.status{display:flex;align-items:center;gap:8px}.dot{width:8px;height:8px;border-radius:50%;background:var(--skin-teal);box-shadow:0 0 14px var(--skin-teal)}.voice-card{flex:1;min-height:0;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:22px 20px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;position:relative;overflow:hidden}.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--skin-muted)}.voice-orb{position:relative;width:188px;height:188px}.voice-orb:before,.voice-orb:after{content:"";position:absolute;border-radius:50%;border:1px solid color-mix(in srgb,var(--skin-gold) 24%,transparent);inset:0;animation:pulse 2.2s ease-in-out infinite}.voice-orb:after{inset:17px;border-color:color-mix(in srgb,var(--skin-teal) 20%,transparent);animation-delay:.5s}.voice-core{position:absolute;inset:29px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#fff0c8,var(--skin-gold) 35%,#d77d68 70%,#743d52 100%);display:grid;place-items:center;box-shadow:0 0 65px var(--skin-gold-soft);transition:box-shadow var(--skin-reveal-ms) var(--skin-motion-ease),transform var(--skin-reveal-ms) var(--skin-motion-ease)}.bars{height:58px;display:flex;gap:5px;align-items:center}.bars i{display:block;width:5px;border-radius:8px;background:#fff8ec;animation:bars 1s ease-in-out infinite}.bars i:nth-child(2){animation-delay:.12s}.bars i:nth-child(3){animation-delay:.24s}.bars i:nth-child(4){animation-delay:.36s}.bars i:nth-child(5){animation-delay:.48s}@keyframes bars{0%,100%{height:12px;opacity:.55}50%{height:45px;opacity:1}}.prompt{font-family:var(--skin-primary-font);font-size:27px;line-height:1.18;text-align:center;max-width:390px;margin:10px 0 7px}.caption{text-align:center;color:var(--skin-muted);font-size:13px;line-height:1.5;max-width:390px;min-height:42px}.reveal-plate{position:absolute;left:20px;right:20px;bottom:110px;padding:16px 18px;border:1px solid var(--line);border-radius:18px;background:rgba(7,8,11,.76);backdrop-filter:blur(14px);font-family:var(--skin-primary-font);font-size:22px;line-height:1.25;text-align:center;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity var(--skin-reveal-ms) var(--skin-motion-ease),transform var(--skin-reveal-ms) var(--skin-motion-ease),box-shadow var(--skin-reveal-ms) var(--skin-motion-ease)}.reveal-plate.active{opacity:1;transform:translateY(0)}.reveal-plate[data-cue-type="consequenceMoment"]{box-shadow:0 0 42px var(--skin-gold-soft);border-color:color-mix(in srgb,var(--skin-gold) 45%,transparent)}.reveal-plate[data-cue-type="orientationMoment"]{box-shadow:0 0 42px var(--skin-teal-soft);border-color:color-mix(in srgb,var(--skin-teal) 45%,transparent)}.controls{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:10px;width:100%;margin-top:16px}.control{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--skin-text);border-radius:17px;padding:13px 8px;display:flex;flex-direction:column;gap:5px;align-items:center;font-size:12px;cursor:pointer}.control.primary{background:linear-gradient(135deg,var(--skin-teal),#337d77);border-color:transparent;font-weight:800}.control.end{background:rgba(215,125,104,.11);color:#ffd8ce;border-color:rgba(215,125,104,.22)}.icon{font-size:20px}.input-wrap{display:none;width:100%;margin-top:12px;gap:8px}.input-wrap.active{display:flex}.input-wrap input{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.045);color:var(--skin-text);padding:12px 14px;border-radius:14px;outline:none}.input-wrap button{border:0;border-radius:14px;padding:0 14px;background:var(--skin-gold);font-weight:800}.receipt{flex:1;display:flex;align-items:center}.receipt-card{width:100%;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:24px}.check{width:62px;height:62px;border-radius:20px;background:var(--skin-teal-soft);color:#93e4d8;display:grid;place-items:center;font-size:32px;margin-bottom:18px}.receipt h2{font-family:var(--skin-primary-font);font-size:31px;margin:0 0 10px}.receipt p{margin:0 0 18px;color:var(--skin-muted);line-height:1.5}.row{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid var(--line);font-size:13px}.row span{color:var(--skin-muted)}.row strong{text-align:right}.secondary{width:100%;margin-top:15px;border:1px solid var(--line);background:transparent;color:var(--skin-text);border-radius:16px;padding:14px;font-weight:700}.foot{text-align:center;color:var(--skin-muted);font-size:11px;margin-top:12px}.skin-listening .voice-core{box-shadow:0 0 65px var(--skin-teal-soft)}.skin-speaking .voice-core{box-shadow:0 0 72px rgba(237,239,243,.15)}.skin-reveal .voice-core{transform:scale(.98);box-shadow:0 0 80px var(--skin-gold-soft)}.skin-hover .voice-core{box-shadow:0 0 70px var(--skin-gold-soft)}.skin-close{animation:closefade var(--skin-close-ms) var(--skin-motion-ease)}@keyframes closefade{from{opacity:1}to{opacity:.78}}@media(max-height:700px){h1{font-size:31px}.orb-wrap{width:175px;height:175px;margin-bottom:18px}.voice-orb{width:150px;height:150px}.prompt{font-size:23px}}
+    button{font:inherit}.app{height:100%;max-width:540px;margin:0 auto;padding:env(safe-area-inset-top) 18px env(safe-area-inset-bottom);display:flex;flex-direction:column;position:relative}.top{display:flex;justify-content:space-between;align-items:center;padding:16px 2px 8px}.brand{display:flex;gap:10px;align-items:center}.mark{width:36px;height:36px;border-radius:13px;background:linear-gradient(135deg,var(--skin-gold),#db8e5a);display:grid;place-items:center;color:#1b2430;font-weight:900;box-shadow:0 12px 28px var(--skin-gold-soft)}.brand strong{display:block;font-family:var(--skin-primary-font);font-size:18px}.brand span,.pill{font-size:11px;color:var(--skin-muted)}.pill{border:1px solid var(--line);background:rgba(255,255,255,.035);padding:8px 10px;border-radius:999px}.engine-label{font-size:10px;color:var(--skin-muted);margin-left:8px}.screen{display:none;flex:1;min-height:0;flex-direction:column}.screen.active{display:flex}.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 8px 22px}.orb-wrap{position:relative;width:220px;height:220px;margin-bottom:30px}.orb,.ring,.ring2{position:absolute;border-radius:50%}.ring{inset:0;border:1px solid color-mix(in srgb,var(--skin-gold) 28%,transparent);animation:pulse 2.7s ease-in-out infinite}.ring2{inset:20px;border:1px solid color-mix(in srgb,var(--skin-teal) 22%,transparent);animation:pulse 2.7s ease-in-out infinite .7s}.orb{inset:38px;background:radial-gradient(circle at 35% 30%,#fff0c8,var(--skin-gold) 35%,#d77d68 70%,#743d52 100%);box-shadow:0 0 80px var(--skin-gold-soft),inset 0 -16px 35px rgba(58,22,32,.24);display:grid;place-items:center;font-size:48px}@keyframes pulse{0%,100%{transform:scale(.95);opacity:.35}50%{transform:scale(1.04);opacity:.9}}h1{font-family:var(--skin-primary-font);font-size:36px;line-height:1.02;max-width:390px;margin:0 0 14px}.sub{color:var(--skin-muted);font-size:15px;line-height:1.55;max-width:390px;margin:0}.card{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px}.start{width:100%;border:0;border-radius:18px;padding:17px 20px;font-weight:800;font-size:16px;color:#1a222d;background:linear-gradient(135deg,#ffd891,var(--skin-gold));cursor:pointer}.hint{text-align:center;color:var(--skin-muted);font-size:12px;margin-top:10px}.voice-stage{flex:1;display:flex;flex-direction:column;min-height:0;padding:6px 0 14px}.status-row{display:flex;justify-content:space-between;align-items:center;margin:3px 2px 12px;color:var(--skin-muted);font-size:12px}.status{display:flex;align-items:center;gap:8px}.dot{width:8px;height:8px;border-radius:50%;background:var(--skin-teal);box-shadow:0 0 14px var(--skin-teal)}.voice-card{flex:1;min-height:0;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:22px 20px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;position:relative;overflow:hidden}.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--skin-muted)}.voice-orb{position:relative;width:188px;height:188px}.voice-orb:before,.voice-orb:after{content:"";position:absolute;border-radius:50%;border:1px solid color-mix(in srgb,var(--skin-gold) 24%,transparent);inset:0;animation:pulse 2.2s ease-in-out infinite}.voice-orb:after{inset:17px;border-color:color-mix(in srgb,var(--skin-teal) 20%,transparent);animation-delay:.5s}.voice-core{position:absolute;inset:29px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#fff0c8,var(--skin-gold) 35%,#d77d68 70%,#743d52 100%);display:grid;place-items:center;box-shadow:0 0 65px var(--skin-gold-soft);transition:box-shadow var(--skin-reveal-ms) var(--skin-motion-ease),transform var(--skin-reveal-ms) var(--skin-motion-ease)}.bars{height:58px;display:flex;gap:5px;align-items:center}.bars i{display:block;width:5px;border-radius:8px;background:#fff8ec;animation:bars 1s ease-in-out infinite}.bars i:nth-child(2){animation-delay:.12s}.bars i:nth-child(3){animation-delay:.24s}.bars i:nth-child(4){animation-delay:.36s}.bars i:nth-child(5){animation-delay:.48s}@keyframes bars{0%,100%{height:12px;opacity:.55}50%{height:45px;opacity:1}}.prompt{font-family:var(--skin-primary-font);font-size:27px;line-height:1.18;text-align:center;max-width:390px;margin:10px 0 7px}.caption{text-align:center;color:var(--skin-muted);font-size:13px;line-height:1.5;max-width:390px;min-height:42px}.reveal-plate{position:absolute;left:20px;right:20px;bottom:110px;padding:16px 18px;border:1px solid var(--line);border-radius:18px;background:rgba(7,8,11,.76);backdrop-filter:blur(14px);font-family:var(--skin-primary-font);font-size:22px;line-height:1.25;text-align:center;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity var(--skin-reveal-ms) var(--skin-motion-ease),transform var(--skin-reveal-ms) var(--skin-motion-ease),box-shadow var(--skin-reveal-ms) var(--skin-motion-ease)}.reveal-plate.active{opacity:1;transform:translateY(0)}.reveal-plate[data-cue-type="consequenceMoment"]{box-shadow:0 0 42px var(--skin-gold-soft);border-color:color-mix(in srgb,var(--skin-gold) 45%,transparent)}.reveal-plate[data-cue-type="orientationMoment"]{box-shadow:0 0 42px var(--skin-teal-soft);border-color:color-mix(in srgb,var(--skin-teal) 45%,transparent)}.controls{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:10px;width:100%;margin-top:16px}.control{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--skin-text);border-radius:17px;padding:13px 8px;display:flex;flex-direction:column;gap:5px;align-items:center;font-size:12px;cursor:pointer}.control.primary{background:linear-gradient(135deg,var(--skin-teal),#337d77);border-color:transparent;font-weight:800}.control.end{background:rgba(215,125,104,.11);color:#ffd8ce;border-color:rgba(215,125,104,.22)}.icon{font-size:20px}.input-wrap{display:none;width:100%;margin-top:12px;gap:8px}.input-wrap.active{display:flex}.input-wrap input{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.045);color:var(--skin-text);padding:12px 14px;border-radius:14px;outline:none}.input-wrap button{border:0;border-radius:14px;padding:0 14px;background:var(--skin-gold);font-weight:800}.receipt{flex:1;display:flex;align-items:center}.receipt-card{width:100%;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:24px}.check{width:62px;height:62px;border-radius:20px;background:var(--skin-teal-soft);color:#93e4d8;display:grid;place-items:center;font-size:32px;margin-bottom:18px}.receipt h2{font-family:var(--skin-primary-font);font-size:31px;margin:0 0 10px}.receipt p{margin:0 0 18px;color:var(--skin-muted);line-height:1.5}.row{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid var(--line);font-size:13px}.row span{color:var(--skin-muted)}.row strong{text-align:right}.secondary{width:100%;margin-top:15px;border:1px solid var(--line);background:transparent;color:var(--skin-text);border-radius:16px;padding:14px;font-weight:700}.foot{text-align:center;color:var(--skin-muted);font-size:11px;margin-top:12px}.skin-listening .voice-core{box-shadow:0 0 65px var(--skin-teal-soft)}.skin-speaking .voice-core{box-shadow:0 0 72px rgba(237,239,243,.15)}.skin-reveal .voice-core{transform:scale(.98);box-shadow:0 0 80px var(--skin-gold-soft)}.skin-hover .voice-core{box-shadow:0 0 70px var(--skin-gold-soft)}.skin-close{animation:closefade var(--skin-close-ms) var(--skin-motion-ease)}@keyframes closefade{from{opacity:1}to{opacity:.78}}@media(max-height:700px){h1{font-size:31px}.orb-wrap{width:175px;height:175px;margin-bottom:18px}.voice-orb{width:150px;height:150px}.prompt{font-size:23px}}
   </style>
 </head>
 <body>
   <main class="app">
     <header class="top">
       <div class="brand"><div class="mark">✦</div><div><strong>Explain It</strong><span>Governed understanding from Kellen</span></div></div>
-      <div class="pill">Founder Envoy · 3 min</div>
+      <div class="pill">Founder Envoy · 3 min <span id="engineLabel" class="engine-label">NONE</span></div>
     </header>
 
     <section id="startScreen" class="screen active">
@@ -73,89 +73,36 @@
   <script src="api.js"></script>
   <script src="skins/founder-envoy-v1.js"></script>
   <script src="skin-engine.js"></script>
+  <script src="voice-engine.js"></script>
   <script>
     ExplainSkinEngine.applySkin('founder_envoy_consequence_narrator_v1');
 
     const screens={start:document.getElementById('startScreen'),voice:document.getElementById('voiceScreen'),receipt:document.getElementById('receiptScreen')};
-    const promptEl=document.getElementById('prompt'),captionEl=document.getElementById('caption'),statusText=document.getElementById('statusText');
+    const promptEl=document.getElementById('prompt'),captionEl=document.getElementById('caption'),statusText=document.getElementById('statusText'),engineLabelEl=document.getElementById('engineLabel');
     const params=new URLSearchParams(location.search);
     const inviteToken=params.get('i');
-    let mission=null;
-    let recipient='';
-    let role='';
-    let notes='';
+    let mission=null,recipient='',role='',notes='';
     let idx=0,startTime,timerInt=null,answers=[],handoff=false;
-    let pendingTimeouts=[];
-    let finishing=false;
-    let microphoneStream=null;
-    let activeMissionId=null;
-    let isRecording=false;
-    let isSpeaking=false;
+    let pendingTimeouts=[],finishing=false,microphoneStream=null,activeMissionId=null,isRecording=false;
 
-    function schedule(fn,ms){
-      const id=setTimeout(()=>{
-        pendingTimeouts=pendingTimeouts.filter(x=>x!==id);
-        if(!activeMissionId||finishing)return;
-        fn();
-      },ms);
-      pendingTimeouts.push(id);
-      return id;
-    }
+    function updateEngineLabel(){engineLabelEl.textContent=ExplainVoiceEngine.getUiEngineLabel()}
+    window.addEventListener('explain:voice-state',updateEngineLabel);
 
-    function stopMicrophone(){
-      if(!microphoneStream)return;
-      microphoneStream.getTracks().forEach(track=>track.stop());
-      microphoneStream=null;
-      isRecording=false;
-    }
-
-    async function startMicrophone(){
-      stopMicrophone();
-      try{
-        microphoneStream=await navigator.mediaDevices.getUserMedia({audio:true});
-        isRecording=true;
-        return true;
-      }catch(err){
-        microphoneStream=null;
-        isRecording=false;
-        return false;
-      }
-    }
-
-    function stopAllRuntimeActivity(){
-      if(timerInt){clearInterval(timerInt);timerInt=null;}
-      pendingTimeouts.forEach(clearTimeout);
-      pendingTimeouts=[];
-      if('speechSynthesis' in window)speechSynthesis.cancel();
-      stopMicrophone();
-      activeMissionId=null;
-      isSpeaking=false;
-      ExplainSkinEngine.clearCue();
-      statusText.textContent='Ready';
-    }
+    function schedule(fn,ms){const id=setTimeout(()=>{pendingTimeouts=pendingTimeouts.filter(x=>x!==id);if(!activeMissionId||finishing)return;fn()},ms);pendingTimeouts.push(id);return id}
+    function stopMicrophone(){if(!microphoneStream)return;microphoneStream.getTracks().forEach(track=>track.stop());microphoneStream=null;isRecording=false}
+    async function startMicrophone(){stopMicrophone();try{microphoneStream=await navigator.mediaDevices.getUserMedia({audio:true});isRecording=true;return true}catch(err){microphoneStream=null;isRecording=false;return false}}
+    function setVoiceState(mode,engineLabel,engineEnabled){ExplainVoiceEngine.setVoiceRuntimeState({mode,engineLabel,engineEnabled});updateEngineLabel()}
+    function stopAllRuntimeActivity(){if(timerInt){clearInterval(timerInt);timerInt=null}pendingTimeouts.forEach(clearTimeout);pendingTimeouts=[];ExplainVoiceEngine.stop();stopMicrophone();activeMissionId=null;ExplainSkinEngine.clearCue();statusText.textContent='Ready';setVoiceState(ExplainVoiceEngine.VoiceMode.DISABLED,ExplainVoiceEngine.VoiceEngineLabel.NONE,false)}
 
     async function bootstrap(){
       if(inviteToken){
         try{
-          mission=await ExplainAPI.getInvite(inviteToken);
-          recipient=mission.recipientDisplayName||'';
-          role=mission.roleOrContext||'';
-          notes=mission.approvedPersonalizationContext?.notes||'';
-          if(mission.state==='closed'&&mission.receipt){
-            stopAllRuntimeActivity();
-            document.getElementById('decisionReceipt').textContent=mission.receipt.summary||'Consequential moment surfaced';
-            document.getElementById('handoffReceipt').textContent=mission.receipt.handoffType?'Requested':'None';
-            show('receipt');
-            ExplainSkinEngine.setRoomState('close');
-            return;
-          }
-        }catch(err){
-          document.getElementById('startSubtitle').textContent='This invitation could not be resolved or has expired.';
-          document.getElementById('startBtn').disabled=true;
-        }
+          mission=await ExplainAPI.getInvite(inviteToken);recipient=mission.recipientDisplayName||'';role=mission.roleOrContext||'';notes=mission.approvedPersonalizationContext?.notes||'';
+          if(mission.state==='closed'&&mission.receipt){stopAllRuntimeActivity();document.getElementById('decisionReceipt').textContent=mission.receipt.summary||'Consequential moment surfaced';document.getElementById('handoffReceipt').textContent=mission.receipt.handoffType?'Requested':'None';show('receipt');ExplainSkinEngine.setRoomState('close');return}
+        }catch(err){document.getElementById('startSubtitle').textContent='This invitation could not be resolved or has expired.';document.getElementById('startBtn').disabled=true}
       }
       if(recipient)document.getElementById('startTitle').textContent=`A governed explanation for ${recipient}`;
-      if(role)document.getElementById('startSubtitle').textContent=`Built around your world as ${role}—not a chatbot, not a pitch.`;
+      if(role)document.getElementById('startSubtitle').textContent=`Built around your world as ${role}—not a chatbot, not a pitch.`
     }
 
     const opening=()=>recipient?`Hi ${recipient}. Kellen asked me to explain ADL in a way that connects to your world.`:'Hi. Kellen asked me to explain ADL in a way that connects to your world.';
@@ -172,87 +119,49 @@
     ];
 
     function show(name){Object.values(screens).forEach(s=>s.classList.remove('active'));screens[name].classList.add('active')}
-    function speak(text){
+    async function speak(text){
       if(!activeMissionId||finishing)return;
-      if('speechSynthesis' in window){
-        speechSynthesis.cancel();
-        const missionIdAtStart=activeMissionId;
-        const u=new SpeechSynthesisUtterance(text);
-        u.rate=.92;
-        u.pitch=.98;
-        u.onstart=()=>{
-          if(activeMissionId!==missionIdAtStart||finishing)return;
-          isSpeaking=true;
-          statusText.textContent='Envoy speaking';
-          ExplainSkinEngine.setRoomState('speaking');
-        };
-        u.onend=()=>{
-          if(activeMissionId!==missionIdAtStart||finishing)return;
-          isSpeaking=false;
-          statusText.textContent=isRecording?'Listening':'Ready';
-          ExplainSkinEngine.setRoomState(isRecording?'listening':'hover');
-        };
-        speechSynthesis.speak(u);
+      try{
+        await ExplainVoiceEngine.speak({
+          text,
+          rate:.92,
+          pitch:.98,
+          onStart:()=>{if(!activeMissionId||finishing)return;statusText.textContent='Envoy speaking';ExplainSkinEngine.setRoomState('speaking')},
+          onEnd:()=>{if(!activeMissionId||finishing)return;statusText.textContent=isRecording?'Listening':'Ready';ExplainSkinEngine.setRoomState(isRecording?'listening':'hover')}
+        });
+      }catch(err){
+        statusText.textContent='Voice unavailable';
+        console.error(err);
       }
     }
     function setLine(i){const [p,c,cue]=lines()[i];promptEl.textContent=p;captionEl.textContent=c;if(cue)ExplainSkinEngine.renderCue(cue);else ExplainSkinEngine.clearCue();speak(p+' '+c)}
     function next(){if(finishing||!activeMissionId)return;idx=Math.min(idx+1,lines().length-1);setLine(idx);if(idx===lines().length-1)schedule(finish,4200)}
 
     async function finish(){
-      if(finishing)return;
-      finishing=true;
-      const missionIdAtFinish=activeMissionId;
-      stopAllRuntimeActivity();
-      ExplainSkinEngine.setRoomState('close');
-      const primary=answers[0]||null;
-      const last=answers[answers.length-1]||'';
-      handoff=/meeting|call|time|more info|demo|kellen|follow up/i.test(last);
-      if(inviteToken&&missionIdAtFinish){
-        try{
-          await ExplainAPI.writeReceipt(inviteToken,{summary:primary||'Consequential moment surfaced',handoffType:handoff?'follow_up':null,primaryQuestion:last||null,outcomeCode:handoff?'handoff_requested':'closed_no_handoff',hoverSignal:Boolean(primary),idempotencyKey:`close:${inviteToken}`});
-        }catch(err){console.error(err);}
-      }
-      if(primary)document.getElementById('decisionReceipt').textContent=primary.slice(0,44)+(primary.length>44?'…':'');
-      document.getElementById('handoffReceipt').textContent=handoff?'Requested':'None';
-      show('receipt');
+      if(finishing)return;finishing=true;const missionIdAtFinish=activeMissionId;stopAllRuntimeActivity();ExplainSkinEngine.setRoomState('close');
+      const primary=answers[0]||null,last=answers[answers.length-1]||'';handoff=/meeting|call|time|more info|demo|kellen|follow up/i.test(last);
+      if(inviteToken&&missionIdAtFinish){try{await ExplainAPI.writeReceipt(inviteToken,{summary:primary||'Consequential moment surfaced',handoffType:handoff?'follow_up':null,primaryQuestion:last||null,outcomeCode:handoff?'handoff_requested':'closed_no_handoff',hoverSignal:Boolean(primary),idempotencyKey:`close:${inviteToken}`})}catch(err){console.error(err)}}
+      if(primary)document.getElementById('decisionReceipt').textContent=primary.slice(0,44)+(primary.length>44?'…':'');document.getElementById('handoffReceipt').textContent=handoff?'Requested':'None';show('receipt')
     }
 
     document.getElementById('startBtn').onclick=async()=>{
-      stopAllRuntimeActivity();
-      finishing=false;
-      activeMissionId=mission?.missionId||`local-${Date.now()}`;
+      stopAllRuntimeActivity();finishing=false;activeMissionId=mission?.missionId||`local-${Date.now()}`;
       if(inviteToken){try{await ExplainAPI.setMissionState(inviteToken,'running')}catch(err){}}
-      show('voice');
-      ExplainSkinEngine.setRoomState('speaking');
-      startTime=Date.now();
-      timerInt=setInterval(()=>{const s=Math.floor((Date.now()-startTime)/1000);document.getElementById('timer').textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`},1000);
+      show('voice');ExplainSkinEngine.setRoomState('speaking');startTime=Date.now();timerInt=setInterval(()=>{const s=Math.floor((Date.now()-startTime)/1000);document.getElementById('timer').textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`},1000);
       const micOk=await startMicrophone();
-      if(!micOk)statusText.textContent='Voice unavailable · type or continue';
-      setLine(0);
-      schedule(next,6500);
+      setVoiceState(ExplainVoiceEngine.VoiceMode.DEGRADED_FALLBACK,ExplainVoiceEngine.VoiceEngineLabel.BROWSER_TTS,true);
+      if(!micOk)statusText.textContent='Voice degraded · type or continue';
+      setLine(0);schedule(next,6500)
     };
 
     document.getElementById('nextBtn').onclick=next;
     document.getElementById('typeBtn').onclick=()=>document.getElementById('inputWrap').classList.toggle('active');
     document.getElementById('sendAnswer').onclick=()=>{const input=document.getElementById('answerInput');if(input.value.trim()){answers.push(input.value.trim());input.value='';next()}};
     document.getElementById('endBtn').onclick=finish;
-    document.getElementById('restartBtn').onclick=()=>{
-      stopAllRuntimeActivity();
-      finishing=false;
-      idx=0;
-      answers=[];
-      handoff=false;
-      promptEl.textContent='Hi. Kellen asked me to explain ADL in a way that connects to your world.';
-      captionEl.textContent='I’m not a chatbot and I’m not here to pitch you.';
-      document.getElementById('timer').textContent='00:00';
-      document.getElementById('inputWrap').classList.remove('active');
-      ExplainSkinEngine.setRoomState('listening');
-      show('start');
-    };
+    document.getElementById('restartBtn').onclick=()=>{stopAllRuntimeActivity();finishing=false;idx=0;answers=[];handoff=false;promptEl.textContent='Hi. Kellen asked me to explain ADL in a way that connects to your world.';captionEl.textContent='I’m not a chatbot and I’m not here to pitch you.';document.getElementById('timer').textContent='00:00';document.getElementById('inputWrap').classList.remove('active');ExplainSkinEngine.setRoomState('listening');show('start')};
+    window.addEventListener('beforeunload',stopAllRuntimeActivity);window.addEventListener('pagehide',stopAllRuntimeActivity);
 
-    window.addEventListener('beforeunload',stopAllRuntimeActivity);
-    window.addEventListener('pagehide',stopAllRuntimeActivity);
-
+    setVoiceState(ExplainVoiceEngine.VoiceMode.DISABLED,ExplainVoiceEngine.VoiceEngineLabel.NONE,false);
     bootstrap();
   </script>
 </body>
