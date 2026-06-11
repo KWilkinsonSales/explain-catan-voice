@@ -1,0 +1,37 @@
+name: Voice Guard
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  enforce-voice-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install ripgrep
+        run: sudo apt-get update && sudo apt-get install -y ripgrep
+
+      - name: Block direct browser speech API usage
+        shell: bash
+        run: |
+          set -euo pipefail
+          MATCHES="$(rg -n --hidden --glob '!.git/*' '(^|[^A-Za-z0-9_])(window\.)?speechSynthesis\.(speak|cancel|pause|resume)\s*\(' . || true)"
+
+          if [ -z "$MATCHES" ]; then
+            echo "No browser speech API usage found."
+            exit 0
+          fi
+
+          VIOLATIONS="$(printf '%s\n' "$MATCHES" | grep -v '^\./voice-engine\.js:' || true)"
+
+          if [ -n "$VIOLATIONS" ]; then
+            echo "BUILD FAILURE: browser speech API usage outside voice-engine.js"
+            echo "$VIOLATIONS"
+            exit 1
+          fi
+
+          echo "Voice gate passed. All browser speech API usage is isolated to voice-engine.js."
