@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Create Explain Mission</title>
+  <style>
+    :root{--bg:#0b1320;--panel:#131f31;--text:#f5f1e8;--muted:#a8b5c8;--gold:#f1bd6c;--line:rgba(255,255,255,.1)}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,system-ui,sans-serif;background:linear-gradient(180deg,#0b1320,#111c2d);color:var(--text);padding:24px}.wrap{max-width:560px;margin:0 auto}.card{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:24px;padding:22px}h1{font-family:Georgia,serif;margin:0 0 8px}.sub{color:var(--muted);line-height:1.5;margin-bottom:20px}.grid{display:grid;gap:14px}label{display:grid;gap:7px;font-size:13px;color:var(--muted)}input,textarea,select{width:100%;border:1px solid var(--line);background:#0f1a2a;color:var(--text);border-radius:14px;padding:13px 14px;font:inherit}textarea{min-height:90px;resize:vertical}button{width:100%;border:0;border-radius:16px;padding:15px;background:linear-gradient(135deg,#ffd891,var(--gold));font-weight:800;color:#1b2430;cursor:pointer}.result{display:none;margin-top:18px;padding:16px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.035)}.result.active{display:block}.url{word-break:break-all;color:#dfe8f5;font-size:13px;line-height:1.5}.mini{color:var(--muted);font-size:12px;margin-top:10px}.row{display:flex;gap:10px;margin-top:12px}.row button{flex:1;background:#21364f;color:var(--text)}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Create an Explain Mission</h1>
+      <p class="sub">Generate a recipient-specific invitation. Each opening creates one temporary room with one bounded Mission.</p>
+      <div class="grid">
+        <label>Recipient name<input id="recipient" placeholder="Scott" /></label>
+        <label>Role or context<input id="role" placeholder="Attorney, operator, investor..." /></label>
+        <label>Topic<input id="topic" value="Explain ADL" /></label>
+        <label>Approved context<textarea id="context" placeholder="Only include context Kellen has approved for this explanation."></textarea></label>
+        <button id="createBtn">Create invitation</button>
+      </div>
+      <div id="result" class="result">
+        <strong>Invitation ready</strong>
+        <div id="url" class="url"></div>
+        <div class="row"><button id="copyBtn">Copy link</button><button id="openBtn">Open room</button></div>
+        <div class="mini">Prototype note: Mission metadata is stored only in this browser for now. A production backend is still required for cross-device invitations and governed receipt return.</div>
+      </div>
+    </section>
+  </main>
+  <script src="mission.js"></script>
+  <script>
+    let created;
+    document.getElementById('createBtn').onclick=()=>{
+      created=ExplainMission.create({
+        recipient:document.getElementById('recipient').value.trim()||null,
+        topic:document.getElementById('topic').value.trim()||'Explain ADL',
+        approvedContext:{role:document.getElementById('role').value.trim(),notes:document.getElementById('context').value.trim()}
+      });
+      const url=new URL('index.html',location.href);url.searchParams.set('i',created.inviteToken);
+      document.getElementById('url').textContent=url.href;
+      document.getElementById('result').classList.add('active');
+    };
+    document.getElementById('copyBtn').onclick=async()=>{await navigator.clipboard.writeText(document.getElementById('url').textContent)};
+    document.getElementById('openBtn').onclick=()=>location.href=document.getElementById('url').textContent;
+  </script>
+</body>
+</html>
