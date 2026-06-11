@@ -1,2 +1,2 @@
 window.EXPLAIN_API =
-  "https://explain-mission-api.explain.workers.dev";
+  "https://explain-runtime.explain.workers.dev";
